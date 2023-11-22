@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+          "name": "android",
+          "request": "launch",
+          "type": "dart",
+          "deviceId": "emulator-5554"
+      },
+      {
+          "name": "ios",
+          "request": "launch",
+          "type": "dart",
+          "deviceId": "CBD458BA-F72E-423A-BEB1-8706D083E2D6"
+      },
+    ],
+    // 同時デバッグ設定
+    "compounds": [
+        {
+            "name": "All Devices",
+            "configurations": [
+                "android",
+                "ios"
+            ],
+        }
+    ]
+}
