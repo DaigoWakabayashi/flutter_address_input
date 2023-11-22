@@ -14,6 +14,15 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: ListPage());
+    return MaterialApp(
+      theme: ThemeData(
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.all(8),
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const ListPage(),
+    );
   }
 }
