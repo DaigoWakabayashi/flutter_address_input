@@ -23,10 +23,7 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Text('$runtimeType'),
-      ),
+      body: Center(child: Text('$runtimeType')),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(
@@ -47,9 +44,7 @@ class AddPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Text('$runtimeType'),
-      ),
+      body: Center(child: Text('$runtimeType')),
     );
   }
 }
