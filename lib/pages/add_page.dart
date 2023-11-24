@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_address_input/enums/prefecture.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 
@@ -11,7 +12,7 @@ class AddPage extends HookWidget {
   Widget build(BuildContext context) {
     // Controller
     final zipcodeController = useTextEditingController();
-    final address1Controller = useTextEditingController();
+    final address1State = useState<Prefecture?>(null);
     final address2Controller = useTextEditingController();
     final address3Controller = useTextEditingController();
     // FocusNode
@@ -25,8 +26,8 @@ class AddPage extends HookWidget {
       () => zipcodeController.text.isNotEmpty,
     );
     final isValidAddress1 = useListenableSelector(
-      address1Controller,
-      () => address1Controller.text.isNotEmpty,
+      address1State,
+      () => address1State.value != null,
     );
     final isValidAddress2 = useListenableSelector(
       address2Controller,
@@ -43,7 +44,7 @@ class AddPage extends HookWidget {
       final navigator = Navigator.of(context);
       await FirebaseFirestore.instance.collection('addresses').add({
         'zipcode': zipcodeController.text,
-        'address1': address1Controller.text,
+        'address1': address1State.value!.ja,
         'address2': address2Controller.text,
         'address3': address3Controller.text,
         'createdAt': FieldValue.serverTimestamp(),
@@ -52,7 +53,7 @@ class AddPage extends HookWidget {
     }, [context]);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(), // バックボタン表示のため
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -72,11 +73,14 @@ class AddPage extends HookWidget {
               ],
             ),
             const Gap(8),
-            TextFormField(
-              controller: address1Controller,
-              focusNode: address1FocusNode,
+            DropdownButtonFormField<Prefecture>(
+              value: null,
               decoration: const InputDecoration(labelText: '都道府県'),
-              onEditingComplete: () => address2FocusNode.requestFocus(),
+              onChanged: (value) => address1State.value = value,
+              focusNode: address1FocusNode,
+              items: Prefecture.values
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
+                  .toList(),
             ),
             const Gap(8),
             TextFormField(
