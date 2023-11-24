@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +9,7 @@ import 'package:flutter_address_input/models/address.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart';
 
 /// TODO: Provider 引数に使っているため [Address] を immutable にする
 final _addAddressProvider =
@@ -74,8 +78,11 @@ class AddPage extends HookConsumerWidget {
               autofocus: true,
               controller: zipcodeController,
               decoration: const InputDecoration(labelText: '郵便番号'),
-              // TODO: https://github.com/DaigoWakabayashi/flutter_address_input/issues/6
-              onEditingComplete: () {},
+              onChanged: (value) async {
+                if (value.length != 7) return;
+                final result = await zipCodeToAddress(zipcodeController.text);
+                log(result.toString());
+              },
               keyboardType: TextInputType.number,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(7),
@@ -127,3 +134,62 @@ class AddPage extends HookConsumerWidget {
     );
   }
 }
+
+/// 郵便番号から住所を取得する
+///
+/// API: http://zipcloud.ibsnet.co.jp/doc/api
+///
+/// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
+///
+/// レスポンスサンプル
+/// ```json
+/// {
+/// 	"message": null,
+/// 	"results": [
+/// 		{
+/// 			"address1": "北海道",
+/// 			"address2": "美唄市",
+/// 			"address3": "上美唄町協和",
+/// 			"kana1": "ﾎｯｶｲﾄﾞｳ",
+/// 			"kana2": "ﾋﾞﾊﾞｲｼ",
+/// 			"kana3": "ｶﾐﾋﾞﾊﾞｲﾁｮｳｷｮｳﾜ",
+/// 			"prefcode": "1",
+/// 			"zipcode": "0790177"
+/// 		},
+/// 		{
+/// 			"address1": "北海道",
+/// 			"address2": "美唄市",
+/// 			"address3": "上美唄町南",
+/// 			"kana1": "ﾎｯｶｲﾄﾞｳ",
+/// 			"kana2": "ﾋﾞﾊﾞｲｼ",
+/// 			"kana3": "ｶﾐﾋﾞﾊﾞｲﾁｮｳﾐﾅﾐ",
+/// 			"prefcode": "1",
+/// 			"zipcode": "0790177"
+/// 		}
+/// 	],
+/// 	"status": 200
+/// }
+/// ```
+Future<AddressResponse?> zipCodeToAddress(String zipCode) async {
+  final response = await get(
+    Uri.parse('https://zipcloud.ibsnet.co.jp/api/search?zipcode=$zipCode'),
+  );
+  // 正常なステータスコードが返ってきているか
+  if (response.statusCode != 200) {
+    return null;
+  }
+  // ヒットした住所はあるか
+  final result = jsonDecode(response.body);
+  if (result['results'] == null) {
+    return null;
+  }
+  // 結果が2つ以上のこともあるが、簡易的に最初のひとつを採用することとする
+  final addressMap = (result['results'] as List).first;
+  return (
+    address1: addressMap['address1'] as String,
+    address2: addressMap['address2'] as String,
+    address3: addressMap['address3'] as String
+  );
+}
+
+typedef AddressResponse = ({String address1, String address2, String address3});

@@ -65,6 +65,7 @@ enum Prefecture {
   ///
   final int code;
 
-  /// 都道府県名（日本語の文字列）
+  /// 日本語の都道府県名
+  /// 「都」「道」「府」「県」の文字列を含む
   final String ja;
 }
