@@ -16,7 +16,6 @@ class AddPage extends HookWidget {
     final address2Controller = useTextEditingController();
     final address3Controller = useTextEditingController();
     // FocusNode
-    final zipcodeFocusNode = useFocusNode();
     final address1FocusNode = useFocusNode();
     final address2FocusNode = useFocusNode();
     final address3FocusNode = useFocusNode();
@@ -61,9 +60,8 @@ class AddPage extends HookWidget {
           children: [
             const Gap(16),
             TextFormField(
-              controller: zipcodeController,
-              focusNode: zipcodeFocusNode,
               autofocus: true,
+              controller: zipcodeController,
               decoration: const InputDecoration(labelText: '郵便番号'),
               onEditingComplete: () => address1FocusNode.requestFocus(),
               keyboardType: TextInputType.number,
