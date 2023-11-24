@@ -11,13 +11,11 @@ class AddPage extends HookWidget {
   Widget build(BuildContext context) {
     // Controller
     final zipcodeController = useTextEditingController();
-    final prefcodeController = useTextEditingController();
     final address1Controller = useTextEditingController();
     final address2Controller = useTextEditingController();
     final address3Controller = useTextEditingController();
     // FocusNode
     final zipcodeFocusNode = useFocusNode();
-    final prefcodeFocusNode = useFocusNode();
     final address1FocusNode = useFocusNode();
     final address2FocusNode = useFocusNode();
     final address3FocusNode = useFocusNode();
@@ -25,10 +23,6 @@ class AddPage extends HookWidget {
     final isValidZipcode = useListenableSelector(
       zipcodeController,
       () => zipcodeController.text.isNotEmpty,
-    );
-    final isValidPrefcode = useListenableSelector(
-      prefcodeController,
-      () => prefcodeController.text.isNotEmpty,
     );
     final isValidAddress1 = useListenableSelector(
       address1Controller,
@@ -42,11 +36,8 @@ class AddPage extends HookWidget {
       address3Controller,
       () => address3Controller.text.isNotEmpty,
     );
-    final buttonEnabled = isValidZipcode &&
-        isValidPrefcode &&
-        isValidAddress1 &&
-        isValidAddress2 &&
-        isValidAddress3;
+    final buttonEnabled =
+        isValidZipcode && isValidAddress1 && isValidAddress2 && isValidAddress3;
     // Effect
     useEffect(() {
       zipcodeFocusNode.requestFocus();
@@ -57,7 +48,6 @@ class AddPage extends HookWidget {
       final navigator = Navigator.of(context);
       await FirebaseFirestore.instance.collection('addresses').add({
         'zipcode': zipcodeController.text,
-        'prefcode': prefcodeController.text,
         'address1': address1Controller.text,
         'address2': address2Controller.text,
         'address3': address3Controller.text,
@@ -71,25 +61,19 @@ class AddPage extends HookWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Gap(16),
             TextFormField(
               controller: zipcodeController,
               focusNode: zipcodeFocusNode,
-              decoration: const InputDecoration(labelText: '郵便番号(7桁)'),
-              onEditingComplete: () => prefcodeFocusNode.requestFocus(),
+              decoration: const InputDecoration(labelText: '郵便番号'),
+              onEditingComplete: () => address1FocusNode.requestFocus(),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(7),
                 FilteringTextInputFormatter.digitsOnly,
               ],
-            ),
-            const Gap(8),
-            TextFormField(
-              controller: prefcodeController,
-              focusNode: prefcodeFocusNode,
-              decoration: const InputDecoration(labelText: '都道府県コード'),
-              onEditingComplete: () => address1FocusNode.requestFocus(),
             ),
             const Gap(8),
             TextFormField(
@@ -109,13 +93,15 @@ class AddPage extends HookWidget {
             TextFormField(
               controller: address3Controller,
               focusNode: address3FocusNode,
-              decoration: const InputDecoration(labelText: '町域'),
+              decoration: const InputDecoration(labelText: '番地'),
               onEditingComplete: () => FocusScope.of(context).unfocus(),
             ),
             const Gap(8),
-            ElevatedButton(
-              onPressed: buttonEnabled ? add : null,
-              child: const Text('追加'),
+            Center(
+              child: ElevatedButton(
+                onPressed: buttonEnabled ? add : null,
+                child: const Text('追加'),
+              ),
             ),
           ],
         ),
