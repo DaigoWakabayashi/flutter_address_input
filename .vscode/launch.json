@@ -8,11 +8,16 @@
           "deviceId": "emulator-5554"
       },
       {
-          "name": "ios",
+          "name": "ios(simulator)",
           "request": "launch",
           "type": "dart",
           "deviceId": "CBD458BA-F72E-423A-BEB1-8706D083E2D6"
       },
+      {
+            "name": "ios(physical)",
+            "request": "launch",
+            "type": "dart",
+        },
     ],
     // 同時デバッグ設定
     "compounds": [
@@ -20,7 +25,7 @@
             "name": "All Devices",
             "configurations": [
                 "android",
-                "ios"
+                "ios(simulator)"
             ],
         }
     ]
