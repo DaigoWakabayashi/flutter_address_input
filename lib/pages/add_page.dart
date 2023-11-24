@@ -38,11 +38,6 @@ class AddPage extends HookWidget {
     );
     final buttonEnabled =
         isValidZipcode && isValidAddress1 && isValidAddress2 && isValidAddress3;
-    // Effect
-    useEffect(() {
-      zipcodeFocusNode.requestFocus();
-      return null;
-    }, const []);
     // Callback
     final add = useCallback(() async {
       final navigator = Navigator.of(context);
@@ -67,6 +62,7 @@ class AddPage extends HookWidget {
             TextFormField(
               controller: zipcodeController,
               focusNode: zipcodeFocusNode,
+              autofocus: true,
               decoration: const InputDecoration(labelText: '郵便番号'),
               onEditingComplete: () => address1FocusNode.requestFocus(),
               keyboardType: TextInputType.number,
