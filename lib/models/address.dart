@@ -19,11 +19,15 @@ final class Address {
   /// 町域名
   final String address3;
 
+  /// 建物名
+  final String? address4;
+
   Address({
     required this.zipcode,
     required this.address1,
     required this.address2,
     required this.address3,
+    this.address4,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,7 @@ final class Address {
       address1: json['address1'],
       address2: json['address2'],
       address3: json['address3'],
+      address4: json['address4'],
     );
   }
 }
