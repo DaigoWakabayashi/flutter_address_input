@@ -2,14 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
+import 'package:flutter_address_input/models/address.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AddPage extends HookWidget {
+/// TODO: Provider 引数に使っているため [Address] を immutable にする
+final _addAddressProvider =
+    Provider.autoDispose.family<Future<void>, Address>((ref, address) async {
+  await FirebaseFirestore.instance
+      .collection('addresses')
+      .add(address.toJson());
+});
+
+class AddPage extends HookConsumerWidget {
   const AddPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Controller
     final zipcodeController = useTextEditingController();
     final address1State = useState<Prefecture?>(null);
@@ -42,15 +52,13 @@ class AddPage extends HookWidget {
     // Callback
     final add = useCallback(() async {
       final navigator = Navigator.of(context);
-      await FirebaseFirestore.instance.collection('addresses').add({
-        'zipcode': zipcodeController.text,
-        'address1': address1State.value!.ja,
-        'address2': address2Controller.text,
-        'address3': address3Controller.text,
-        'address4':
-            address4Controller.text.isEmpty ? null : address4Controller.text,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+      ref.read(_addAddressProvider(Address(
+        zipcode: zipcodeController.text,
+        address1: address1State.value!.ja,
+        address2: address2Controller.text,
+        address3: address3Controller.text,
+        address4: address4Controller.text,
+      )));
       navigator.pop();
     }, [context]);
 
