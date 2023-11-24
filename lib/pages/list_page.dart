@@ -5,9 +5,12 @@ import 'package:flutter_address_input/pages/add_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final _addressesStreamProvider = StreamProvider<List<Address>>((ref) {
-  return FirebaseFirestore.instance.collection('addresses').snapshots().map(
-        (snapshot) =>
-            snapshot.docs.map((doc) => Address.fromJson(doc.data())).toList(),
+  return FirebaseFirestore.instance
+      .collection('addresses')
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .map(
+        (snap) => snap.docs.map((doc) => Address.fromJson(doc.data())).toList(),
       );
 });
 

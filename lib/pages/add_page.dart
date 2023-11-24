@@ -49,6 +49,7 @@ class AddPage extends HookWidget {
         'address1': address1Controller.text,
         'address2': address2Controller.text,
         'address3': address3Controller.text,
+        'createdAt': FieldValue.serverTimestamp(),
       });
       navigator.pop();
     }, [context]);
