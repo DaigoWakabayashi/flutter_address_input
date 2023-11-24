@@ -72,15 +72,14 @@ class AddPage extends HookWidget {
             ),
             const Gap(8),
             DropdownButtonFormField<Prefecture>(
-              value: null,
               decoration: const InputDecoration(labelText: '都道府県'),
+              items: Prefecture.values
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
+                  .toList(),
               onChanged: (value) {
                 address1State.value = value;
                 address2FocusNode.requestFocus();
               },
-              items: Prefecture.values
-                  .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
-                  .toList(),
             ),
             const Gap(8),
             TextFormField(
