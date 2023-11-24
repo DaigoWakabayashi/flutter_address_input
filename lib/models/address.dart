@@ -10,14 +10,6 @@ final class Address {
   ///
   final String zipcode;
 
-  /// 都道府県コード
-  ///
-  /// JIS X 0401 に定められた2桁の都道府県コード。
-  ///
-  /// https://www.soumu.go.jp/denshijiti/code.html
-  ///
-  final String prefcode;
-
   /// 都道府県名
   final String address1;
 
@@ -27,21 +19,24 @@ final class Address {
   /// 町域名
   final String address3;
 
+  /// 建物名
+  final String? address4;
+
   Address({
     required this.zipcode,
-    required this.prefcode,
     required this.address1,
     required this.address2,
     required this.address3,
+    this.address4,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
       zipcode: json['zipcode'],
-      prefcode: json['prefcode'],
       address1: json['address1'],
       address2: json['address2'],
       address3: json['address3'],
+      address4: json['address4'],
     );
   }
 }

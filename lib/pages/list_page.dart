@@ -22,20 +22,19 @@ class ListPage extends ConsumerWidget {
     final stream = ref.watch(_addressesStreamProvider);
     return Scaffold(
       body: stream.when(
-        data: (addresses) {
-          return ListView.builder(
-            itemCount: addresses.length,
-            itemBuilder: (_, index) {
-              final address = addresses[index];
-              return ListTile(
-                title: Text(address.address1),
-                subtitle: Text(address.address2 + address.address3),
-              );
-            },
-          );
-        },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(child: Text(error.toString())),
+        error: (e, _) => Center(child: Text(e.toString())),
+        data: (addresses) => ListView.separated(
+          itemCount: addresses.length,
+          separatorBuilder: (_, __) => const Divider(),
+          itemBuilder: (_, index) {
+            final address = addresses[index];
+            return ListTile(
+              title: Text(address.address1),
+              subtitle: Text(address.address2 + address.address3),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push(

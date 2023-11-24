@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_address_input/enums/prefecture.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 
@@ -10,22 +12,22 @@ class AddPage extends HookWidget {
   Widget build(BuildContext context) {
     // Controller
     final zipcodeController = useTextEditingController();
-    final prefcodeController = useTextEditingController();
-    final address1Controller = useTextEditingController();
+    final address1State = useState<Prefecture?>(null);
     final address2Controller = useTextEditingController();
     final address3Controller = useTextEditingController();
+    final address4Controller = useTextEditingController();
+    // FocusNode
+    final address2FocusNode = useFocusNode();
+    final address3FocusNode = useFocusNode();
+    final address4FocusNode = useFocusNode();
     // Validation
     final isValidZipcode = useListenableSelector(
       zipcodeController,
       () => zipcodeController.text.isNotEmpty,
     );
-    final isValidPrefcode = useListenableSelector(
-      prefcodeController,
-      () => prefcodeController.text.isNotEmpty,
-    );
     final isValidAddress1 = useListenableSelector(
-      address1Controller,
-      () => address1Controller.text.isNotEmpty,
+      address1State,
+      () => address1State.value != null,
     );
     final isValidAddress2 = useListenableSelector(
       address2Controller,
@@ -35,70 +37,81 @@ class AddPage extends HookWidget {
       address3Controller,
       () => address3Controller.text.isNotEmpty,
     );
-    final buttonEnabled = isValidZipcode &&
-        isValidPrefcode &&
-        isValidAddress1 &&
-        isValidAddress2 &&
-        isValidAddress3;
+    final buttonEnabled =
+        isValidZipcode && isValidAddress1 && isValidAddress2 && isValidAddress3;
     // Callback
     final add = useCallback(() async {
       final navigator = Navigator.of(context);
       await FirebaseFirestore.instance.collection('addresses').add({
         'zipcode': zipcodeController.text,
-        'prefcode': prefcodeController.text,
-        'address1': address1Controller.text,
+        'address1': address1State.value!.ja,
         'address2': address2Controller.text,
         'address3': address3Controller.text,
+        'address4':
+            address4Controller.text.isEmpty ? null : address4Controller.text,
         'createdAt': FieldValue.serverTimestamp(),
       });
       navigator.pop();
     }, [context]);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(), // バックボタン表示のため
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Gap(16),
             TextFormField(
+              autofocus: true,
               controller: zipcodeController,
-              decoration: const InputDecoration(
-                labelText: '郵便番号',
-              ),
+              decoration: const InputDecoration(labelText: '郵便番号'),
+              // TODO: https://github.com/DaigoWakabayashi/flutter_address_input/issues/6
+              onEditingComplete: () {},
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(7),
+                FilteringTextInputFormatter.digitsOnly,
+              ],
             ),
             const Gap(8),
-            TextFormField(
-              controller: prefcodeController,
-              decoration: const InputDecoration(
-                labelText: '都道府県コード',
-              ),
-            ),
-            const Gap(8),
-            TextFormField(
-              controller: address1Controller,
-              decoration: const InputDecoration(
-                labelText: '都道府県',
-              ),
+            DropdownButtonFormField<Prefecture>(
+              decoration: const InputDecoration(labelText: '都道府県'),
+              items: Prefecture.values
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
+                  .toList(),
+              onChanged: (value) {
+                address1State.value = value;
+                address2FocusNode.requestFocus();
+              },
             ),
             const Gap(8),
             TextFormField(
               controller: address2Controller,
-              decoration: const InputDecoration(
-                labelText: '市区町村',
-              ),
+              focusNode: address2FocusNode,
+              decoration: const InputDecoration(labelText: '市区町村'),
+              onEditingComplete: () => address3FocusNode.requestFocus(),
             ),
             const Gap(8),
             TextFormField(
               controller: address3Controller,
-              decoration: const InputDecoration(
-                labelText: '町域',
-              ),
+              focusNode: address3FocusNode,
+              decoration: const InputDecoration(labelText: '番地'),
+              onEditingComplete: () => address4FocusNode.requestFocus(),
             ),
             const Gap(8),
-            ElevatedButton(
-              onPressed: buttonEnabled ? add : null,
-              child: const Text('追加'),
+            TextFormField(
+              controller: address4Controller,
+              focusNode: address4FocusNode,
+              decoration: const InputDecoration(labelText: '建物名（任意）'),
+              onEditingComplete: () => FocusScope.of(context).unfocus(),
+            ),
+            const Gap(16),
+            Center(
+              child: ElevatedButton(
+                onPressed: buttonEnabled ? add : null,
+                child: const Text('追加'),
+              ),
             ),
           ],
         ),
