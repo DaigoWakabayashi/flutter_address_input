@@ -16,7 +16,6 @@ class AddPage extends HookWidget {
     final address2Controller = useTextEditingController();
     final address3Controller = useTextEditingController();
     // FocusNode
-    final address1FocusNode = useFocusNode();
     final address2FocusNode = useFocusNode();
     final address3FocusNode = useFocusNode();
     // Validation
@@ -63,7 +62,8 @@ class AddPage extends HookWidget {
               autofocus: true,
               controller: zipcodeController,
               decoration: const InputDecoration(labelText: '郵便番号'),
-              onEditingComplete: () => address1FocusNode.requestFocus(),
+              // TODO: https://github.com/DaigoWakabayashi/flutter_address_input/issues/6
+              onEditingComplete: () {},
               keyboardType: TextInputType.number,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(7),
@@ -74,8 +74,10 @@ class AddPage extends HookWidget {
             DropdownButtonFormField<Prefecture>(
               value: null,
               decoration: const InputDecoration(labelText: '都道府県'),
-              onChanged: (value) => address1State.value = value,
-              focusNode: address1FocusNode,
+              onChanged: (value) {
+                address1State.value = value;
+                address2FocusNode.requestFocus();
+              },
               items: Prefecture.values
                   .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
                   .toList(),
