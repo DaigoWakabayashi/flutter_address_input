@@ -14,6 +14,12 @@ class AddPage extends HookWidget {
     final address1Controller = useTextEditingController();
     final address2Controller = useTextEditingController();
     final address3Controller = useTextEditingController();
+    // FocusNode
+    final zipcodeFocusNode = useFocusNode();
+    final prefcodeFocusNode = useFocusNode();
+    final address1FocusNode = useFocusNode();
+    final address2FocusNode = useFocusNode();
+    final address3FocusNode = useFocusNode();
     // Validation
     final isValidZipcode = useListenableSelector(
       zipcodeController,
@@ -40,6 +46,11 @@ class AddPage extends HookWidget {
         isValidAddress1 &&
         isValidAddress2 &&
         isValidAddress3;
+    // Effect
+    useEffect(() {
+      zipcodeFocusNode.requestFocus();
+      return null;
+    }, const []);
     // Callback
     final add = useCallback(() async {
       final navigator = Navigator.of(context);
@@ -63,37 +74,37 @@ class AddPage extends HookWidget {
             const Gap(16),
             TextFormField(
               controller: zipcodeController,
-              decoration: const InputDecoration(
-                labelText: '郵便番号',
-              ),
+              focusNode: zipcodeFocusNode,
+              decoration: const InputDecoration(labelText: '郵便番号'),
+              onEditingComplete: () => prefcodeFocusNode.requestFocus(),
             ),
             const Gap(8),
             TextFormField(
               controller: prefcodeController,
-              decoration: const InputDecoration(
-                labelText: '都道府県コード',
-              ),
+              focusNode: prefcodeFocusNode,
+              decoration: const InputDecoration(labelText: '都道府県コード'),
+              onEditingComplete: () => address1FocusNode.requestFocus(),
             ),
             const Gap(8),
             TextFormField(
               controller: address1Controller,
-              decoration: const InputDecoration(
-                labelText: '都道府県',
-              ),
+              focusNode: address1FocusNode,
+              decoration: const InputDecoration(labelText: '都道府県'),
+              onEditingComplete: () => address2FocusNode.requestFocus(),
             ),
             const Gap(8),
             TextFormField(
               controller: address2Controller,
-              decoration: const InputDecoration(
-                labelText: '市区町村',
-              ),
+              focusNode: address2FocusNode,
+              decoration: const InputDecoration(labelText: '市区町村'),
+              onEditingComplete: () => address3FocusNode.requestFocus(),
             ),
             const Gap(8),
             TextFormField(
               controller: address3Controller,
-              decoration: const InputDecoration(
-                labelText: '町域',
-              ),
+              focusNode: address3FocusNode,
+              decoration: const InputDecoration(labelText: '町域'),
+              onEditingComplete: () => FocusScope.of(context).unfocus(),
             ),
             const Gap(8),
             ElevatedButton(
