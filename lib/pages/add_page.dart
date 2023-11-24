@@ -33,7 +33,7 @@ class AddPage extends HookConsumerWidget {
     // Validation
     final isValidZipcode = useListenableSelector(
       zipcodeController,
-      () => zipcodeController.text.isNotEmpty,
+      () => zipcodeController.text.length == 7,
     );
     final isValidAddress1 = useListenableSelector(
       address1State,
