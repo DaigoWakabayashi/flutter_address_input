@@ -9,14 +9,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-/// TODO: Provider 引数に使っているため [Address] を immutable にする
-final _addAddressProvider =
-    Provider.autoDispose.family<Future<void>, Address>((ref, address) async {
-  await FirebaseFirestore.instance
-      .collection('addresses')
-      .add(address.toJson());
-});
-
 class AddPage extends HookConsumerWidget {
   const AddPage({super.key});
 
@@ -51,18 +43,6 @@ class AddPage extends HookConsumerWidget {
     );
     final buttonEnabled =
         isValidZipcode && isValidAddress1 && isValidAddress2 && isValidAddress3;
-    // Callback
-    final add = useCallback(() async {
-      final navigator = Navigator.of(context);
-      ref.read(_addAddressProvider(Address(
-        zipcode: zipcodeController.text,
-        address1: address1State.value!.ja,
-        address2: address2Controller.text,
-        address3: address3Controller.text,
-        address4: address4Controller.text,
-      )));
-      navigator.pop();
-    }, [context]);
 
     return Scaffold(
       appBar: AppBar(),
@@ -131,7 +111,23 @@ class AddPage extends HookConsumerWidget {
             const Gap(16),
             Center(
               child: ElevatedButton(
-                onPressed: buttonEnabled ? add : null,
+                onPressed: buttonEnabled
+                    ? () async {
+                        final navigator = Navigator.of(context);
+                        await FirebaseFirestore.instance
+                            .collection('addresses')
+                            .add(
+                              Address(
+                                zipcode: zipcodeController.text,
+                                address1: address1State.value!.ja,
+                                address2: address2Controller.text,
+                                address3: address3Controller.text,
+                                address4: address4Controller.text,
+                              ).toJson(),
+                            );
+                        navigator.pop();
+                      }
+                    : null,
                 child: const Text('追加'),
               ),
             ),
