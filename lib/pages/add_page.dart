@@ -64,7 +64,7 @@ class AddPage extends HookConsumerWidget {
     }, [context]);
 
     return Scaffold(
-      appBar: AppBar(), // バックボタン表示のため
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
