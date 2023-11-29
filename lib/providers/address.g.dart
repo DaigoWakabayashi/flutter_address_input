@@ -27,7 +27,7 @@ final subscribeAddressesProvider =
 
 typedef SubscribeAddressesRef = AutoDisposeStreamProviderRef<List<Address>>;
 String _$searchAddressFromZipcodeHash() =>
-    r'e666edeba34428eaec3eb82b3d8bd933dd614944';
+    r'fea8517b75b9327fd9422f00f3ee8dd7975cf18f';
 
 /// Copied from Dart SDK
 class _SystemHash {

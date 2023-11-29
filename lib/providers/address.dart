@@ -46,13 +46,13 @@ Future<SearchAddressResponse?> searchAddressFromZipcode(
     );
     // 正常なレスポンスのみ処理
     if (response.statusCode != 200) {
-      return null;
+      throw Exception();
     }
     // パースして結果の配列を取得
     final body = jsonDecode(response.body) as Map<String, dynamic>;
     final results = body['results'] as List?;
     if (results == null || results.isEmpty) {
-      return null;
+      throw Exception();
     }
     // 複数の住所のうち、先頭の住所を使う
     final addressMap = body['results'].first as Map<String, dynamic>;
