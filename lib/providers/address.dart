@@ -1,10 +1,25 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
+import 'package:flutter_address_input/models/address.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'address.g.dart';
+
+/// [FirebaseFirestore] の addresses コレクションを
+/// 作成日時が新しい順に購読する [Stream]
+@riverpod
+Stream<List<Address>> subscribeAddresses(SubscribeAddressesRef _) {
+  return FirebaseFirestore.instance
+      .collection('addresses')
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .map(
+        (snap) => snap.docs.map((doc) => Address.fromJson(doc.data())).toList(),
+      );
+}
 
 typedef SearchAddressResponse = ({
   Prefecture address1,
@@ -20,7 +35,7 @@ typedef SearchAddressResponse = ({
 ///
 @riverpod
 Future<SearchAddressResponse?> searchAddressFromZipcode(
-  SearchAddressFromZipcodeRef ref,
+  SearchAddressFromZipcodeRef _,
   String zipcode,
 ) async {
   final response = await http.get(

@@ -6,8 +6,28 @@ part of 'address.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$subscribeAddressesHash() =>
+    r'fee478a91da797564381dadc77f9b1a91acb3425';
+
+/// [FirebaseFirestore] の addresses コレクションを
+/// 作成日時が新しい順に購読する [Stream]
+///
+/// Copied from [subscribeAddresses].
+@ProviderFor(subscribeAddresses)
+final subscribeAddressesProvider =
+    AutoDisposeStreamProvider<List<Address>>.internal(
+  subscribeAddresses,
+  name: r'subscribeAddressesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$subscribeAddressesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SubscribeAddressesRef = AutoDisposeStreamProviderRef<List<Address>>;
 String _$searchAddressFromZipcodeHash() =>
-    r'47dd3cacd3ad49619f8b598b277159c988c6b46b';
+    r'cf4a20784eafafa9547b50e2626e4e9582c0998f';
 
 /// Copied from Dart SDK
 class _SystemHash {
