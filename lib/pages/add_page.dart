@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
 import 'package:flutter_address_input/models/address.dart';
 import 'package:flutter_address_input/providers/address.dart';
+import 'package:flutter_address_input/providers/loading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -82,6 +83,7 @@ class AddPage extends HookConsumerWidget {
               ],
               onChanged: (value) async {
                 if (value.length != 7) return;
+                ref.read(loadingProvider.notifier).show();
                 final res = await ref.read(searchAddressProvider(value).future);
                 if (res != null) {
                   address1State.value = res.address1;
@@ -89,6 +91,7 @@ class AddPage extends HookConsumerWidget {
                   address3Controller.text = res.address3;
                   address3FocusNode.requestFocus();
                 }
+                ref.read(loadingProvider.notifier).hide();
               },
             ),
             const Gap(8),
