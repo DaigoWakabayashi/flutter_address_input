@@ -2,14 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
+import 'package:flutter_address_input/models/address.dart';
+import 'package:flutter_address_input/providers/address.dart';
+import 'package:flutter_address_input/providers/loading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AddPage extends HookWidget {
+class AddPage extends HookConsumerWidget {
   const AddPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Controller
     final zipcodeController = useTextEditingController();
     final address1State = useState<Prefecture?>(null);
@@ -23,7 +27,7 @@ class AddPage extends HookWidget {
     // Validation
     final isValidZipcode = useListenableSelector(
       zipcodeController,
-      () => zipcodeController.text.isNotEmpty,
+      () => zipcodeController.text.length == 7,
     );
     final isValidAddress1 = useListenableSelector(
       address1State,
@@ -39,23 +43,9 @@ class AddPage extends HookWidget {
     );
     final buttonEnabled =
         isValidZipcode && isValidAddress1 && isValidAddress2 && isValidAddress3;
-    // Callback
-    final add = useCallback(() async {
-      final navigator = Navigator.of(context);
-      await FirebaseFirestore.instance.collection('addresses').add({
-        'zipcode': zipcodeController.text,
-        'address1': address1State.value!.ja,
-        'address2': address2Controller.text,
-        'address3': address3Controller.text,
-        'address4':
-            address4Controller.text.isEmpty ? null : address4Controller.text,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-      navigator.pop();
-    }, [context]);
 
     return Scaffold(
-      appBar: AppBar(), // バックボタン表示のため
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -66,16 +56,28 @@ class AddPage extends HookWidget {
               autofocus: true,
               controller: zipcodeController,
               decoration: const InputDecoration(labelText: '郵便番号'),
-              // TODO: https://github.com/DaigoWakabayashi/flutter_address_input/issues/6
-              onEditingComplete: () {},
               keyboardType: TextInputType.number,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(7),
                 FilteringTextInputFormatter.digitsOnly,
               ],
+              onChanged: (value) async {
+                if (value.length != 7) return;
+                ref.read(loadingProvider.notifier).show();
+                final res = await ref
+                    .read(searchAddressFromZipcodeProvider(value).future);
+                if (res != null) {
+                  address1State.value = res.address1;
+                  address2Controller.text = res.address2;
+                  address3Controller.text = res.address3;
+                  address3FocusNode.requestFocus();
+                }
+                ref.read(loadingProvider.notifier).hide();
+              },
             ),
             const Gap(8),
             DropdownButtonFormField<Prefecture>(
+              value: address1State.value,
               decoration: const InputDecoration(labelText: '都道府県'),
               items: Prefecture.values
                   .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
@@ -109,7 +111,23 @@ class AddPage extends HookWidget {
             const Gap(16),
             Center(
               child: ElevatedButton(
-                onPressed: buttonEnabled ? add : null,
+                onPressed: buttonEnabled
+                    ? () async {
+                        final navigator = Navigator.of(context);
+                        await FirebaseFirestore.instance
+                            .collection('addresses')
+                            .add(
+                              Address(
+                                zipcode: zipcodeController.text,
+                                address1: address1State.value!.ja,
+                                address2: address2Controller.text,
+                                address3: address3Controller.text,
+                                address4: address4Controller.text,
+                              ).toJson(),
+                            );
+                        navigator.pop();
+                      }
+                    : null,
                 child: const Text('追加'),
               ),
             ),

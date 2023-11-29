@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 /// 住所にあたるモデルクラス
 ///
 /// 各プロパティ名は、日本郵便が公開している
@@ -27,7 +29,7 @@ final class Address {
     required this.address1,
     required this.address2,
     required this.address3,
-    this.address4,
+    required this.address4,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) {
@@ -38,5 +40,16 @@ final class Address {
       address3: json['address3'],
       address4: json['address4'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'zipcode': zipcode,
+      'address1': address1,
+      'address2': address2,
+      'address3': address3,
+      'address4': address4,
+      'createdAt': FieldValue.serverTimestamp(),
+    };
   }
 }
