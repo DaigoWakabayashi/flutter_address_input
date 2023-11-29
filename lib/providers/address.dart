@@ -6,19 +6,21 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'address.g.dart';
 
-typedef AddressResponse = ({
+typedef SearchAddressResponse = ({
   Prefecture address1,
   String address2,
   String address3,
 });
 
-/// 郵便番号から住所を取得する [FutureProvider]
+/// 郵便番号から住所検索 API を叩き
+/// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
 /// API: http://zipcloud.ibsnet.co.jp/doc/api
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
+///
 @riverpod
-Future<AddressResponse?> searchAddress(
-  SearchAddressRef ref,
+Future<SearchAddressResponse?> searchAddressFromZipcode(
+  SearchAddressFromZipcodeRef ref,
   String zipcode,
 ) async {
   final response = await http.get(
@@ -34,7 +36,7 @@ Future<AddressResponse?> searchAddress(
   if (results.isEmpty) {
     return null;
   }
-  // 先頭の住所のみ使う
+  // 複数の住所のうち、先頭の住所を使う
   final addressMap = body['results'].first as Map<String, dynamic>;
   return (
     address1: Prefecture.values.byCode(addressMap['prefcode'] as String),

@@ -84,7 +84,8 @@ class AddPage extends HookConsumerWidget {
               onChanged: (value) async {
                 if (value.length != 7) return;
                 ref.read(loadingProvider.notifier).show();
-                final res = await ref.read(searchAddressProvider(value).future);
+                final res = await ref
+                    .read(searchAddressFromZipcodeProvider(value).future);
                 if (res != null) {
                   address1State.value = res.address1;
                   address2Controller.text = res.address2;

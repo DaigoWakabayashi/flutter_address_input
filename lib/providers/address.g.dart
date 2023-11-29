@@ -6,7 +6,8 @@ part of 'address.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$searchAddressHash() => r'ca37709804e7edaa8f5b7b9faf3bc65fd78f0450';
+String _$searchAddressFromZipcodeHash() =>
+    r'47dd3cacd3ad49619f8b598b277159c988c6b46b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,47 +30,56 @@ class _SystemHash {
   }
 }
 
-/// 郵便番号から住所を取得する [FutureProvider]
+/// 郵便番号から住所検索 API を叩き
+/// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
 /// API: http://zipcloud.ibsnet.co.jp/doc/api
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
-/// Copied from [searchAddress].
-@ProviderFor(searchAddress)
-const searchAddressProvider = SearchAddressFamily();
+///
+/// Copied from [searchAddressFromZipcode].
+@ProviderFor(searchAddressFromZipcode)
+const searchAddressFromZipcodeProvider = SearchAddressFromZipcodeFamily();
 
-/// 郵便番号から住所を取得する [FutureProvider]
+/// 郵便番号から住所検索 API を叩き
+/// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
 /// API: http://zipcloud.ibsnet.co.jp/doc/api
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
-/// Copied from [searchAddress].
-class SearchAddressFamily extends Family<AsyncValue<AddressResponse?>> {
-  /// 郵便番号から住所を取得する [FutureProvider]
+///
+/// Copied from [searchAddressFromZipcode].
+class SearchAddressFromZipcodeFamily
+    extends Family<AsyncValue<SearchAddressResponse?>> {
+  /// 郵便番号から住所検索 API を叩き
+  /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
   /// API: http://zipcloud.ibsnet.co.jp/doc/api
   /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
   ///
-  /// Copied from [searchAddress].
-  const SearchAddressFamily();
+  ///
+  /// Copied from [searchAddressFromZipcode].
+  const SearchAddressFromZipcodeFamily();
 
-  /// 郵便番号から住所を取得する [FutureProvider]
+  /// 郵便番号から住所検索 API を叩き
+  /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
   /// API: http://zipcloud.ibsnet.co.jp/doc/api
   /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
   ///
-  /// Copied from [searchAddress].
-  SearchAddressProvider call(
+  ///
+  /// Copied from [searchAddressFromZipcode].
+  SearchAddressFromZipcodeProvider call(
     String zipcode,
   ) {
-    return SearchAddressProvider(
+    return SearchAddressFromZipcodeProvider(
       zipcode,
     );
   }
 
   @override
-  SearchAddressProvider getProviderOverride(
-    covariant SearchAddressProvider provider,
+  SearchAddressFromZipcodeProvider getProviderOverride(
+    covariant SearchAddressFromZipcodeProvider provider,
   ) {
     return call(
       provider.zipcode,
@@ -88,43 +98,47 @@ class SearchAddressFamily extends Family<AsyncValue<AddressResponse?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'searchAddressProvider';
+  String? get name => r'searchAddressFromZipcodeProvider';
 }
 
-/// 郵便番号から住所を取得する [FutureProvider]
+/// 郵便番号から住所検索 API を叩き
+/// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
 /// API: http://zipcloud.ibsnet.co.jp/doc/api
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
-/// Copied from [searchAddress].
-class SearchAddressProvider
-    extends AutoDisposeFutureProvider<AddressResponse?> {
-  /// 郵便番号から住所を取得する [FutureProvider]
+///
+/// Copied from [searchAddressFromZipcode].
+class SearchAddressFromZipcodeProvider
+    extends AutoDisposeFutureProvider<SearchAddressResponse?> {
+  /// 郵便番号から住所検索 API を叩き
+  /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
   /// API: http://zipcloud.ibsnet.co.jp/doc/api
   /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
   ///
-  /// Copied from [searchAddress].
-  SearchAddressProvider(
+  ///
+  /// Copied from [searchAddressFromZipcode].
+  SearchAddressFromZipcodeProvider(
     String zipcode,
   ) : this._internal(
-          (ref) => searchAddress(
-            ref as SearchAddressRef,
+          (ref) => searchAddressFromZipcode(
+            ref as SearchAddressFromZipcodeRef,
             zipcode,
           ),
-          from: searchAddressProvider,
-          name: r'searchAddressProvider',
+          from: searchAddressFromZipcodeProvider,
+          name: r'searchAddressFromZipcodeProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$searchAddressHash,
-          dependencies: SearchAddressFamily._dependencies,
+                  : _$searchAddressFromZipcodeHash,
+          dependencies: SearchAddressFromZipcodeFamily._dependencies,
           allTransitiveDependencies:
-              SearchAddressFamily._allTransitiveDependencies,
+              SearchAddressFromZipcodeFamily._allTransitiveDependencies,
           zipcode: zipcode,
         );
 
-  SearchAddressProvider._internal(
+  SearchAddressFromZipcodeProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -138,12 +152,14 @@ class SearchAddressProvider
 
   @override
   Override overrideWith(
-    FutureOr<AddressResponse?> Function(SearchAddressRef provider) create,
+    FutureOr<SearchAddressResponse?> Function(
+            SearchAddressFromZipcodeRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: SearchAddressProvider._internal(
-        (ref) => create(ref as SearchAddressRef),
+      override: SearchAddressFromZipcodeProvider._internal(
+        (ref) => create(ref as SearchAddressFromZipcodeRef),
         from: from,
         name: null,
         dependencies: null,
@@ -155,13 +171,14 @@ class SearchAddressProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<AddressResponse?> createElement() {
-    return _SearchAddressProviderElement(this);
+  AutoDisposeFutureProviderElement<SearchAddressResponse?> createElement() {
+    return _SearchAddressFromZipcodeProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SearchAddressProvider && other.zipcode == zipcode;
+    return other is SearchAddressFromZipcodeProvider &&
+        other.zipcode == zipcode;
   }
 
   @override
@@ -173,18 +190,19 @@ class SearchAddressProvider
   }
 }
 
-mixin SearchAddressRef on AutoDisposeFutureProviderRef<AddressResponse?> {
+mixin SearchAddressFromZipcodeRef
+    on AutoDisposeFutureProviderRef<SearchAddressResponse?> {
   /// The parameter `zipcode` of this provider.
   String get zipcode;
 }
 
-class _SearchAddressProviderElement
-    extends AutoDisposeFutureProviderElement<AddressResponse?>
-    with SearchAddressRef {
-  _SearchAddressProviderElement(super.provider);
+class _SearchAddressFromZipcodeProviderElement
+    extends AutoDisposeFutureProviderElement<SearchAddressResponse?>
+    with SearchAddressFromZipcodeRef {
+  _SearchAddressFromZipcodeProviderElement(super.provider);
 
   @override
-  String get zipcode => (origin as SearchAddressProvider).zipcode;
+  String get zipcode => (origin as SearchAddressFromZipcodeProvider).zipcode;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
