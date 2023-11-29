@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,13 +82,13 @@ class AddPage extends HookConsumerWidget {
               ],
               onChanged: (value) async {
                 if (value.length != 7) return;
-                final res = await ref
-                    .read(addressFromZipcodeFutureProvider(value).future);
+                final res =
+                    await ref.read(addressFromZipcodeProvider(value).future);
                 if (res != null) {
-                  log(res.toString());
                   address1State.value = res.address1;
                   address2Controller.text = res.address2;
                   address3Controller.text = res.address3;
+                  address3FocusNode.requestFocus();
                 }
               },
             ),
