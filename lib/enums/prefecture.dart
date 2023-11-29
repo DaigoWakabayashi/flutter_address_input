@@ -69,3 +69,8 @@ enum Prefecture {
   /// 「都」「道」「府」「県」の文字列を含む
   final String ja;
 }
+
+extension PrefEx on List<Prefecture> {
+  Prefecture byCode(String code) =>
+      Prefecture.values.firstWhere((e) => e.code == int.parse(code));
+}

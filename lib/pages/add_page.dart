@@ -77,17 +77,22 @@ class AddPage extends HookConsumerWidget {
               autofocus: true,
               controller: zipcodeController,
               decoration: const InputDecoration(labelText: '郵便番号'),
-              onChanged: (value) async {
-                if (value.length != 7) return;
-                final result = await ref
-                    .read(addressFromZipcodeFutureProvider(value).future);
-                log(result.toString());
-              },
               keyboardType: TextInputType.number,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(7),
                 FilteringTextInputFormatter.digitsOnly,
               ],
+              onChanged: (value) async {
+                if (value.length != 7) return;
+                final res = await ref
+                    .read(addressFromZipcodeFutureProvider(value).future);
+                if (res != null) {
+                  log(res.toString());
+                  address1State.value = res.address1;
+                  address2Controller.text = res.address2;
+                  address3Controller.text = res.address3;
+                }
+              },
             ),
             const Gap(8),
             DropdownButtonFormField<Prefecture>(
