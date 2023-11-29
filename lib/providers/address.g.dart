@@ -7,7 +7,7 @@ part of 'address.dart';
 // **************************************************************************
 
 String _$subscribeAddressesHash() =>
-    r'fee478a91da797564381dadc77f9b1a91acb3425';
+    r'604472efe34b28fe170bd4443ce314221db41728';
 
 /// [FirebaseFirestore] の addresses コレクションを
 /// 作成日時が新しい順に購読する [Stream]
@@ -27,7 +27,7 @@ final subscribeAddressesProvider =
 
 typedef SubscribeAddressesRef = AutoDisposeStreamProviderRef<List<Address>>;
 String _$searchAddressFromZipcodeHash() =>
-    r'cf4a20784eafafa9547b50e2626e4e9582c0998f';
+    r'70b5c646dd1466c1300af978f8b1a77e0f09b942';
 
 /// Copied from Dart SDK
 class _SystemHash {

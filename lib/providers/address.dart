@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
@@ -11,7 +12,7 @@ part 'address.g.dart';
 /// [FirebaseFirestore] の addresses コレクションを
 /// 作成日時が新しい順に購読する [Stream]
 @riverpod
-Stream<List<Address>> subscribeAddresses(SubscribeAddressesRef _) {
+Stream<List<Address>> subscribeAddresses(SubscribeAddressesRef ref) {
   return FirebaseFirestore.instance
       .collection('addresses')
       .orderBy('createdAt', descending: true)
@@ -35,27 +36,33 @@ typedef SearchAddressResponse = ({
 ///
 @riverpod
 Future<SearchAddressResponse?> searchAddressFromZipcode(
-  SearchAddressFromZipcodeRef _,
+  SearchAddressFromZipcodeRef ref,
   String zipcode,
 ) async {
-  final response = await http.get(
-    Uri.parse('https://zipcloud.ibsnet.co.jp/api/search?zipcode=$zipcode'),
-  );
-  // 正常なレスポンスのみ処理
-  if (response.statusCode != 200) {
+  try {
+    final response = await http.get(
+      Uri.parse('https://zipcloud.ibsnet.co.jp/api/search?zipcode=$zipcode'),
+    );
+    // 正常なレスポンスのみ処理
+    if (response.statusCode != 200) {
+      return null;
+    }
+    // パースして結果の配列を取得
+    final body = jsonDecode(response.body) as Map<String, dynamic>;
+    final results = body['results'] as List?;
+    if (results == null || results.isEmpty) {
+      return null;
+    }
+    // 複数の住所のうち、先頭の住所を使う
+    final addressMap = body['results'].first as Map<String, dynamic>;
+    return (
+      address1: Prefecture.values.byCode(addressMap['prefcode'] as String),
+      address2: addressMap['address2'] as String,
+      address3: addressMap['address3'] as String
+    );
+  } on Exception catch (e) {
+    // 住所入力を止めないようにするため、意図的に握りつぶし null を返す
+    log(e.toString());
     return null;
   }
-  // パースして結果の配列を取得
-  final body = jsonDecode(response.body) as Map<String, dynamic>;
-  final results = body['results'] as List;
-  if (results.isEmpty) {
-    return null;
-  }
-  // 複数の住所のうち、先頭の住所を使う
-  final addressMap = body['results'].first as Map<String, dynamic>;
-  return (
-    address1: Prefecture.values.byCode(addressMap['prefcode'] as String),
-    address2: addressMap['address2'] as String,
-    address3: addressMap['address3'] as String
-  );
 }
