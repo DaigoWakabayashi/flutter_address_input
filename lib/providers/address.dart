@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter_address_input/enums/prefecture.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'address.g.dart';
 
 typedef AddressResponse = ({
   Prefecture address1,
@@ -14,9 +16,11 @@ typedef AddressResponse = ({
 ///
 /// API: http://zipcloud.ibsnet.co.jp/doc/api
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
-///
-final addressFromZipcodeProvider = FutureProvider.autoDispose
-    .family<AddressResponse?, String>((ref, zipcode) async {
+@riverpod
+Future<AddressResponse?> searchAddress(
+  SearchAddressRef ref,
+  String zipcode,
+) async {
   final response = await http.get(
     Uri.parse('https://zipcloud.ibsnet.co.jp/api/search?zipcode=$zipcode'),
   );
@@ -37,4 +41,4 @@ final addressFromZipcodeProvider = FutureProvider.autoDispose
     address2: addressMap['address2'] as String,
     address3: addressMap['address3'] as String
   );
-});
+}
