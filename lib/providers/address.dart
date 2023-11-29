@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
 import 'package:flutter_address_input/models/address.dart';
+import 'package:flutter_address_input/providers/global_key.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -60,9 +61,9 @@ Future<SearchAddressResponse?> searchAddressFromZipcode(
       address2: addressMap['address2'] as String,
       address3: addressMap['address3'] as String
     );
-  } on Exception catch (e) {
-    // 住所入力を止めないようにするため、意図的に握りつぶし null を返す
-    log(e.toString());
+  } on Exception catch (_) {
+    final messengerKey = ref.read(scaffoldMessengerKeyProvider).currentState;
+    messengerKey?.showSnackBar(const SnackBar(content: Text('エラーが発生しました')));
     return null;
   }
 }
