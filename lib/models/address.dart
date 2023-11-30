@@ -10,6 +10,9 @@ final class Address {
   ///
   final String zipcode;
 
+  /// 都道府県コード
+  final String prefcode;
+
   /// 都道府県名
   final String address1;
 
@@ -24,6 +27,7 @@ final class Address {
 
   Address({
     required this.zipcode,
+    required this.prefcode,
     required this.address1,
     required this.address2,
     required this.address3,
@@ -33,6 +37,7 @@ final class Address {
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
       zipcode: json['zipcode'],
+      prefcode: json['prefcode'],
       address1: json['address1'],
       address2: json['address2'],
       address3: json['address3'],
@@ -43,6 +48,7 @@ final class Address {
   Map<String, dynamic> toJson() {
     return {
       'zipcode': zipcode,
+      'prefcode': prefcode,
       'address1': address1,
       'address2': address2,
       'address3': address3,

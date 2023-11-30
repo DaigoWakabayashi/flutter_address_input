@@ -1,13 +1,14 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
 import 'package:flutter_address_input/models/address.dart';
-import 'package:flutter_address_input/providers/address.dart';
-import 'package:flutter_address_input/providers/loading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 class AddPage extends HookConsumerWidget {
   const AddPage({super.key});
@@ -61,18 +62,23 @@ class AddPage extends HookConsumerWidget {
                 LengthLimitingTextInputFormatter(7),
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              onChanged: (value) async {
-                if (value.length != 7) return;
-                ref.read(loadingProvider.notifier).show();
-                final res = await ref
-                    .read(searchAddressFromZipcodeProvider(value).future);
-                if (res != null) {
-                  address1State.value = res.address1;
-                  address2Controller.text = res.address2;
-                  address3Controller.text = res.address3;
+              onChanged: (zipcode) async {
+                if (zipcode.length != 7) return;
+                final messenger = ScaffoldMessenger.of(context);
+                final result = await _searchAddress(zipcode);
+                // 結果があれば address3 まで入力
+                if (result != null) {
+                  address1State.value =
+                      Prefecture.values.byCode(result.prefcode);
+                  address2Controller.text = result.address2;
+                  address3Controller.text = result.address3;
                   address3FocusNode.requestFocus();
+                } else {
+                  // 結果がなければ SnackBar 表示
+                  messenger.showSnackBar(
+                    const SnackBar(content: Text('住所が見つかりませんでした')),
+                  );
                 }
-                ref.read(loadingProvider.notifier).hide();
               },
             ),
             const Gap(8),
@@ -119,6 +125,7 @@ class AddPage extends HookConsumerWidget {
                             .add(
                               Address(
                                 zipcode: zipcodeController.text,
+                                prefcode: address1State.value!.code.toString(),
                                 address1: address1State.value!.ja,
                                 address2: address2Controller.text,
                                 address3: address3Controller.text,
@@ -136,4 +143,24 @@ class AddPage extends HookConsumerWidget {
       ),
     );
   }
+}
+
+Future<Address?> _searchAddress(String zipcode) async {
+  final response = await http.get(
+    Uri.parse('https://zipcloud.ibsnet.co.jp/api/search?zipcode=$zipcode'),
+  );
+  // 正常なレスポンスのみ処理
+  if (response.statusCode != 200) {
+    return null;
+  }
+  // パースして結果の配列を取得
+  final body = jsonDecode(response.body) as Map<String, dynamic>;
+  final results = body['results'] as List?;
+  if (results == null || results.isEmpty) {
+    return null;
+  }
+  // 複数の住所のうち、先頭の住所を使う
+  final json = body['results'].first as Map<String, dynamic>;
+  final address = Address.fromJson(json);
+  return address;
 }
