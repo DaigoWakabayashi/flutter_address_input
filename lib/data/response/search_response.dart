@@ -1,18 +1,22 @@
+import 'package:flutter_address_input/domain/address.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/address.dart';
-
+part 'search_response.freezed.dart';
 part 'search_response.g.dart';
 
-@JsonSerializable()
-class SearchResponse {
-  const SearchResponse({required this.status, this.results});
+@freezed
+class SearchResponse with _$SearchResponse {
+  const factory SearchResponse({
+    /// 郵便番号
+    required int status,
 
-  factory SearchResponse.fromJson(Map<String, dynamic> json) =>
+    /// 検索結果
+    required List<Address>? results,
+
+    /// メッセージ
+    required String? message,
+  }) = _SearchResponse;
+
+  factory SearchResponse.fromJson(Map<String, Object?> json) =>
       _$SearchResponseFromJson(json);
-
-  final int status;
-  final List<Address>? results;
-
-  Map<String, dynamic> toJson() => _$SearchResponseToJson(this);
 }
