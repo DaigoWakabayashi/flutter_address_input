@@ -7,10 +7,9 @@ part of 'address.dart';
 // **************************************************************************
 
 String _$subscribeAddressesHash() =>
-    r'604472efe34b28fe170bd4443ce314221db41728';
+    r'e28e591f99c5bf37f7f21d7e57d57071fb71a089';
 
-/// [FirebaseFirestore] の addresses コレクションを
-/// 作成日時が新しい順に購読する [Stream]
+/// [FirebaseFirestore] の addresses コレクションを購読する [Stream]
 ///
 /// Copied from [subscribeAddresses].
 @ProviderFor(subscribeAddresses)

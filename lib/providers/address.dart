@@ -10,15 +10,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'address.g.dart';
 
-/// [FirebaseFirestore] の addresses コレクションを
-/// 作成日時が新しい順に購読する [Stream]
+/// [FirebaseFirestore] の addresses コレクションを購読する [Stream]
 @riverpod
 Stream<List<Address>> subscribeAddresses(SubscribeAddressesRef ref) {
-  return FirebaseFirestore.instance
-      .collection('addresses')
-      .orderBy('createdAt', descending: true)
-      .snapshots()
-      .map(
+  return FirebaseFirestore.instance.collection('addresses').snapshots().map(
         (snap) => snap.docs.map((doc) => Address.fromJson(doc.data())).toList(),
       );
 }
