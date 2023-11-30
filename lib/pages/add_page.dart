@@ -21,6 +21,8 @@ class AddPage extends HookConsumerWidget {
     final address3Controller = useTextEditingController();
     final address4Controller = useTextEditingController();
     // FocusNode
+    // zipcode の FocusNode → autoFocus:true
+    // address1 の FocusNode → AutoFill が成功した場合は address3 へ・失敗した場合は zipCode でのフォーカスを留めるため不要
     final address2FocusNode = useFocusNode();
     final address3FocusNode = useFocusNode();
     final address4FocusNode = useFocusNode();
@@ -81,6 +83,7 @@ class AddPage extends HookConsumerWidget {
             DropdownButtonFormField<Prefecture>(
               value: address1State.value,
               decoration: const InputDecoration(labelText: '都道府県'),
+              menuMaxHeight: MediaQuery.sizeOf(context).height / 2,
               items: Prefecture.values
                   .map((e) => DropdownMenuItem(value: e, child: Text(e.ja)))
                   .toList(),
