@@ -1,55 +1,35 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'address.freezed.dart';
+part 'address.g.dart';
 
 /// 住所にあたるモデルクラス
 ///
 /// 各プロパティ名は、日本郵便が公開している
 /// 郵便番号検索API（https://zipcloud.ibsnet.co.jp/doc/api）
 /// のレスポンスに合わせている
-final class Address {
-  /// 郵便番号
-  ///
-  /// 7桁の数字。ハイフンなし。
-  ///
-  final String zipcode;
+@freezed
+class Address with _$Address {
+  const factory Address({
+    /// 郵便番号
+    ///
+    /// 7桁の数字。ハイフンなし。
+    ///
+    required String zipcode,
 
-  /// 都道府県名
-  final String address1;
+    /// 都道府県名
+    required String address1,
 
-  /// 市区町村名
-  final String address2;
+    /// 市区町村名
+    required String address2,
 
-  /// 町域名
-  final String address3;
+    /// 町域名
+    required String address3,
 
-  /// 建物名
-  final String? address4;
+    /// 建物名
+    required String? address4,
+  }) = _Address;
 
-  Address({
-    required this.zipcode,
-    required this.address1,
-    required this.address2,
-    required this.address3,
-    required this.address4,
-  });
-
-  factory Address.fromJson(Map<String, dynamic> json) {
-    return Address(
-      zipcode: json['zipcode'],
-      address1: json['address1'],
-      address2: json['address2'],
-      address3: json['address3'],
-      address4: json['address4'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'zipcode': zipcode,
-      'address1': address1,
-      'address2': address2,
-      'address3': address3,
-      'address4': address4,
-      'createdAt': FieldValue.serverTimestamp(),
-    };
-  }
+  factory Address.fromJson(Map<String, Object?> json) =>
+      _$AddressFromJson(json);
 }
