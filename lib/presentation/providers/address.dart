@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_address_input/enums/prefecture.dart';
-import 'package:flutter_address_input/models/address.dart';
-import 'package:flutter_address_input/providers/global_key.dart';
+import 'package:flutter_address_input/domain/address.dart';
+import 'package:flutter_address_input/presentation/providers/global_key.dart';
+import 'package:flutter_address_input/util/prefecture.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -27,7 +27,7 @@ typedef SearchAddressResponse = ({
 /// 郵便番号から住所検索 API を叩き
 /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
-/// API: http://zipcloud.ibsnet.co.jp/doc/api
+/// API:
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
 @riverpod

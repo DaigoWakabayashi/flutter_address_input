@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_address_input/enums/prefecture.dart';
-import 'package:flutter_address_input/models/address.dart';
-import 'package:flutter_address_input/providers/address.dart';
-import 'package:flutter_address_input/providers/loading.dart';
+import 'package:flutter_address_input/domain/address.dart';
+import 'package:flutter_address_input/presentation/providers/address.dart';
+import 'package:flutter_address_input/presentation/providers/loading.dart';
+import 'package:flutter_address_input/util/prefecture.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

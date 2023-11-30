@@ -52,7 +52,7 @@ class _SystemHash {
 /// 郵便番号から住所検索 API を叩き
 /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
-/// API: http://zipcloud.ibsnet.co.jp/doc/api
+/// API:
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
 ///
@@ -63,7 +63,7 @@ const searchAddressFromZipcodeProvider = SearchAddressFromZipcodeFamily();
 /// 郵便番号から住所検索 API を叩き
 /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
-/// API: http://zipcloud.ibsnet.co.jp/doc/api
+/// API:
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
 ///
@@ -73,7 +73,7 @@ class SearchAddressFromZipcodeFamily
   /// 郵便番号から住所検索 API を叩き
   /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
-  /// API: http://zipcloud.ibsnet.co.jp/doc/api
+  /// API:
   /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
   ///
   ///
@@ -83,7 +83,7 @@ class SearchAddressFromZipcodeFamily
   /// 郵便番号から住所検索 API を叩き
   /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
-  /// API: http://zipcloud.ibsnet.co.jp/doc/api
+  /// API:
   /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
   ///
   ///
@@ -123,7 +123,7 @@ class SearchAddressFromZipcodeFamily
 /// 郵便番号から住所検索 API を叩き
 /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
 ///
-/// API: http://zipcloud.ibsnet.co.jp/doc/api
+/// API:
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
 ///
@@ -133,7 +133,7 @@ class SearchAddressFromZipcodeProvider
   /// 郵便番号から住所検索 API を叩き
   /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
-  /// API: http://zipcloud.ibsnet.co.jp/doc/api
+  /// API:
   /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
   ///
   ///

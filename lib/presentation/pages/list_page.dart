@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_address_input/pages/add_page.dart';
-import 'package:flutter_address_input/providers/address.dart';
+import 'package:flutter_address_input/presentation/pages/add_page.dart';
+import 'package:flutter_address_input/presentation/providers/address.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ListPage extends ConsumerWidget {
