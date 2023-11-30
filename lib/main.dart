@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_address_input/firebase_options.dart';
 import 'package:flutter_address_input/pages/list_page.dart';
-import 'package:flutter_address_input/providers/loading.dart';
 import 'package:flutter_address_input/providers/global_key.dart';
+import 'package:flutter_address_input/providers/loading.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
