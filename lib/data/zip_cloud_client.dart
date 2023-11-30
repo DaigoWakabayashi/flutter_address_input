@@ -9,13 +9,12 @@ part 'zip_cloud_client.g.dart';
 /// 利用規約: http://zipcloud.ibsnet.co.jp/rule/api
 ///
 @RestApi(baseUrl: 'https://zipcloud.ibsnet.co.jp/api')
-abstract class RestClient {
-  factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+abstract class ZipCloudClient {
+  factory ZipCloudClient(Dio dio, {String baseUrl}) = _ZipCloudClient;
 
   ///
-  /// 郵便番号から住所検索 API 叩く
+  /// 郵便番号から住所検索 API を叩く
+  ///
   @GET('/search')
-  Future<List<Address>> getAddressesFromZipcode(
-    @Query('zipcode') String zipcode,
-  );
+  Future<List<Address>> search(@Query('zipcode') String zipcode);
 }

@@ -8,8 +8,8 @@ part of 'zip_cloud_client.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _RestClient implements RestClient {
-  _RestClient(
+class _ZipCloudClient implements ZipCloudClient {
+  _ZipCloudClient(
     this._dio, {
     this.baseUrl,
   }) {
@@ -21,11 +21,11 @@ class _RestClient implements RestClient {
   String? baseUrl;
 
   @override
-  Future<List<Address>> getAddressesFromZipcode(String zipcode) async {
+  Future<List<Address>> search(String zipcode) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'zipcode': zipcode};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<List<dynamic>>(_setStreamType<List<Address>>(Options(
       method: 'GET',
