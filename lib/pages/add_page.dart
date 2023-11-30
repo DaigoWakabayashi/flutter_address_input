@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_address_input/enums/prefecture.dart';
 import 'package:flutter_address_input/models/address.dart';
+import 'package:flutter_address_input/providers/loading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -50,7 +51,6 @@ class AddPage extends HookConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Gap(16),
             TextFormField(
@@ -64,6 +64,7 @@ class AddPage extends HookConsumerWidget {
               ],
               onChanged: (zipcode) async {
                 if (zipcode.length != 7) return;
+                ref.read(loadingProvider.notifier).show();
                 final messenger = ScaffoldMessenger.of(context);
                 final result = await _searchAddress(zipcode);
                 // 結果があれば address3 まで入力
@@ -79,6 +80,7 @@ class AddPage extends HookConsumerWidget {
                     const SnackBar(content: Text('住所が見つかりませんでした')),
                   );
                 }
+                ref.read(loadingProvider.notifier).hide();
               },
             ),
             const Gap(8),
