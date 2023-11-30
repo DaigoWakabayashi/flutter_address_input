@@ -17,6 +17,9 @@ class Address with _$Address {
     ///
     required String zipcode,
 
+    /// 都道府県コード
+    required String prefcode,
+
     /// 都道府県名
     required String address1,
 

@@ -26,6 +26,9 @@ mixin _$Address {
   ///
   String get zipcode => throw _privateConstructorUsedError;
 
+  /// 都道府県コード
+  String get prefcode => throw _privateConstructorUsedError;
+
   /// 都道府県名
   String get address1 => throw _privateConstructorUsedError;
 
@@ -50,6 +53,7 @@ abstract class $AddressCopyWith<$Res> {
   @useResult
   $Res call(
       {String zipcode,
+      String prefcode,
       String address1,
       String address2,
       String address3,
@@ -70,6 +74,7 @@ class _$AddressCopyWithImpl<$Res, $Val extends Address>
   @override
   $Res call({
     Object? zipcode = null,
+    Object? prefcode = null,
     Object? address1 = null,
     Object? address2 = null,
     Object? address3 = null,
@@ -79,6 +84,10 @@ class _$AddressCopyWithImpl<$Res, $Val extends Address>
       zipcode: null == zipcode
           ? _value.zipcode
           : zipcode // ignore: cast_nullable_to_non_nullable
+              as String,
+      prefcode: null == prefcode
+          ? _value.prefcode
+          : prefcode // ignore: cast_nullable_to_non_nullable
               as String,
       address1: null == address1
           ? _value.address1
@@ -109,6 +118,7 @@ abstract class _$$AddressImplCopyWith<$Res> implements $AddressCopyWith<$Res> {
   @useResult
   $Res call(
       {String zipcode,
+      String prefcode,
       String address1,
       String address2,
       String address3,
@@ -127,6 +137,7 @@ class __$$AddressImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? zipcode = null,
+    Object? prefcode = null,
     Object? address1 = null,
     Object? address2 = null,
     Object? address3 = null,
@@ -136,6 +147,10 @@ class __$$AddressImplCopyWithImpl<$Res>
       zipcode: null == zipcode
           ? _value.zipcode
           : zipcode // ignore: cast_nullable_to_non_nullable
+              as String,
+      prefcode: null == prefcode
+          ? _value.prefcode
+          : prefcode // ignore: cast_nullable_to_non_nullable
               as String,
       address1: null == address1
           ? _value.address1
@@ -162,6 +177,7 @@ class __$$AddressImplCopyWithImpl<$Res>
 class _$AddressImpl implements _Address {
   const _$AddressImpl(
       {required this.zipcode,
+      required this.prefcode,
       required this.address1,
       required this.address2,
       required this.address3,
@@ -176,6 +192,10 @@ class _$AddressImpl implements _Address {
   ///
   @override
   final String zipcode;
+
+  /// 都道府県コード
+  @override
+  final String prefcode;
 
   /// 都道府県名
   @override
@@ -195,7 +215,7 @@ class _$AddressImpl implements _Address {
 
   @override
   String toString() {
-    return 'Address(zipcode: $zipcode, address1: $address1, address2: $address2, address3: $address3, address4: $address4)';
+    return 'Address(zipcode: $zipcode, prefcode: $prefcode, address1: $address1, address2: $address2, address3: $address3, address4: $address4)';
   }
 
   @override
@@ -204,6 +224,8 @@ class _$AddressImpl implements _Address {
         (other.runtimeType == runtimeType &&
             other is _$AddressImpl &&
             (identical(other.zipcode, zipcode) || other.zipcode == zipcode) &&
+            (identical(other.prefcode, prefcode) ||
+                other.prefcode == prefcode) &&
             (identical(other.address1, address1) ||
                 other.address1 == address1) &&
             (identical(other.address2, address2) ||
@@ -216,8 +238,8 @@ class _$AddressImpl implements _Address {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, zipcode, address1, address2, address3, address4);
+  int get hashCode => Object.hash(
+      runtimeType, zipcode, prefcode, address1, address2, address3, address4);
 
   @JsonKey(ignore: true)
   @override
@@ -236,6 +258,7 @@ class _$AddressImpl implements _Address {
 abstract class _Address implements Address {
   const factory _Address(
       {required final String zipcode,
+      required final String prefcode,
       required final String address1,
       required final String address2,
       required final String address3,
@@ -250,6 +273,10 @@ abstract class _Address implements Address {
   /// 7桁の数字。ハイフンなし。
   ///
   String get zipcode;
+  @override
+
+  /// 都道府県コード
+  String get prefcode;
   @override
 
   /// 都道府県名

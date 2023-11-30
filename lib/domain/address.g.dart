@@ -9,6 +9,7 @@ part of 'address.dart';
 _$AddressImpl _$$AddressImplFromJson(Map<String, dynamic> json) =>
     _$AddressImpl(
       zipcode: json['zipcode'] as String,
+      prefcode: json['prefcode'] as String,
       address1: json['address1'] as String,
       address2: json['address2'] as String,
       address3: json['address3'] as String,
@@ -18,6 +19,7 @@ _$AddressImpl _$$AddressImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$AddressImplToJson(_$AddressImpl instance) =>
     <String, dynamic>{
       'zipcode': instance.zipcode,
+      'prefcode': instance.prefcode,
       'address1': instance.address1,
       'address2': instance.address2,
       'address3': instance.address3,

@@ -26,7 +26,7 @@ final subscribeAddressesProvider =
 
 typedef SubscribeAddressesRef = AutoDisposeStreamProviderRef<List<Address>>;
 String _$searchAddressFromZipcodeHash() =>
-    r'fea8517b75b9327fd9422f00f3ee8dd7975cf18f';
+    r'15d416e0911c9a963424e684032c8ded341a1d8e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -68,8 +68,7 @@ const searchAddressFromZipcodeProvider = SearchAddressFromZipcodeFamily();
 ///
 ///
 /// Copied from [searchAddressFromZipcode].
-class SearchAddressFromZipcodeFamily
-    extends Family<AsyncValue<SearchAddressResponse?>> {
+class SearchAddressFromZipcodeFamily extends Family<AsyncValue<Address?>> {
   /// 郵便番号から住所検索 API を叩き
   /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
@@ -129,7 +128,7 @@ class SearchAddressFromZipcodeFamily
 ///
 /// Copied from [searchAddressFromZipcode].
 class SearchAddressFromZipcodeProvider
-    extends AutoDisposeFutureProvider<SearchAddressResponse?> {
+    extends AutoDisposeFutureProvider<Address?> {
   /// 郵便番号から住所検索 API を叩き
   /// 有効なレスポンスがあれば [SearchAddressResponse] を、なければ [null] を返す
   ///
@@ -171,9 +170,7 @@ class SearchAddressFromZipcodeProvider
 
   @override
   Override overrideWith(
-    FutureOr<SearchAddressResponse?> Function(
-            SearchAddressFromZipcodeRef provider)
-        create,
+    FutureOr<Address?> Function(SearchAddressFromZipcodeRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -190,7 +187,7 @@ class SearchAddressFromZipcodeProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<SearchAddressResponse?> createElement() {
+  AutoDisposeFutureProviderElement<Address?> createElement() {
     return _SearchAddressFromZipcodeProviderElement(this);
   }
 
@@ -209,14 +206,13 @@ class SearchAddressFromZipcodeProvider
   }
 }
 
-mixin SearchAddressFromZipcodeRef
-    on AutoDisposeFutureProviderRef<SearchAddressResponse?> {
+mixin SearchAddressFromZipcodeRef on AutoDisposeFutureProviderRef<Address?> {
   /// The parameter `zipcode` of this provider.
   String get zipcode;
 }
 
 class _SearchAddressFromZipcodeProviderElement
-    extends AutoDisposeFutureProviderElement<SearchAddressResponse?>
+    extends AutoDisposeFutureProviderElement<Address?>
     with SearchAddressFromZipcodeRef {
   _SearchAddressFromZipcodeProviderElement(super.provider);
 

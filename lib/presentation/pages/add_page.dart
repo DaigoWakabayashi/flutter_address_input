@@ -68,12 +68,13 @@ class AddPage extends HookConsumerWidget {
               onChanged: (value) async {
                 if (value.length != 7) return;
                 ref.read(loadingProvider.notifier).show();
-                final res = await ref
+                final address = await ref
                     .read(searchAddressFromZipcodeProvider(value).future);
-                if (res != null) {
-                  address1State.value = res.address1;
-                  address2Controller.text = res.address2;
-                  address3Controller.text = res.address3;
+                if (address != null) {
+                  address1State.value =
+                      Prefecture.values.byCode(address.prefcode);
+                  address2Controller.text = address.address2;
+                  address3Controller.text = address.address3;
                   address3FocusNode.requestFocus();
                 }
                 ref.read(loadingProvider.notifier).hide();
@@ -124,6 +125,7 @@ class AddPage extends HookConsumerWidget {
                             .add(
                               Address(
                                 zipcode: zipcodeController.text,
+                                prefcode: address1State.value!.code.toString(),
                                 address1: address1State.value!.ja,
                                 address2: address2Controller.text,
                                 address3: address3Controller.text,
