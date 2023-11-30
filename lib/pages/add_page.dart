@@ -57,6 +57,8 @@ class AddPage extends HookConsumerWidget {
               controller: zipcodeController,
               decoration: const InputDecoration(labelText: '郵便番号'),
               keyboardType: TextInputType.number,
+              // 他の TextField の TapRegion は侵さないので、ひとつ指定するだけでも OK https://api.flutter.dev/flutter/widgets/TextFieldTapRegion-class.html
+              onTapOutside: (_) => FocusScope.of(context).unfocus(),
               inputFormatters: [
                 LengthLimitingTextInputFormatter(7),
                 FilteringTextInputFormatter.digitsOnly,
