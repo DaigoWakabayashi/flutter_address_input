@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// 住所にあたるモデルクラス
 ///
 /// 各プロパティ名は、日本郵便が公開している
@@ -49,7 +47,6 @@ final class Address {
       'address2': address2,
       'address3': address3,
       'address4': address4,
-      'createdAt': FieldValue.serverTimestamp(),
     };
   }
 }
